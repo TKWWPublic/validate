@@ -1880,6 +1880,16 @@ describe('object', () => {
             ]);
         });
 
+        it('validates unknown keys against specified matches', () => {
+
+            const schema = Joi.object().pattern(/\d/, Joi.boolean(), { matches: Joi.array().length(2) });
+            Helper.validate(schema, [
+                [{ 1: true, 2: false }, true],
+                [{ 1: true }, false, '"value" keys failed to match pattern requirements'],
+                [{ 1: true, 2: false, 3: true }, false, '"value" keys failed to match pattern requirements']
+            ]);
+        });
+
         it('validates unknown keys using a schema pattern with a reference', () => {
 
             const schema = Joi.object({
